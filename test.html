@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>نظرسنجی کلاسی</title>
+  
+  <!-- Load Vazirmatn font -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px; /* Prevents zoom on mobile */
+    }
+    button {
+      width: 100%;
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .success {
+      text-align: center;
+      color: green;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>نظرسنجی کلاس درس</h1>
+
+  <form id="surveyForm" action="https://script.google.com/macros/s/AKfycbwjAye0X1URM1n2gUWNwz4zpMM4aDfBQ8mIdtVL5_MKq0Wee-v1BEQH_zQmy5-LW4r0Jg/exec" method="POST">
+    <div class="form-group">
+      <label for="name">نام و نام خانوادگی:</label>
+      <input type="text" id="name" name="نام" required />
+    </div>
+
+    <div class="form-group">
+      <label for="satisfaction">میزان رضایت شما از این درس چقدر است؟</label>
+      <select id="satisfaction" name="رضایت" required>
+        <option value="">انتخاب کنید...</option>
+        <option value="عالی">عالی</option>
+        <option value="خوب">خوب</option>
+        <option value="متوسط">متوسط</option>
+        <option value="ضعیف">ضعیف</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="suggestion">پیشنهادات یا نظرات شما:</label>
+      <textarea id="suggestion" name="پیشنهاد" rows="4" placeholder="مثلاً: بهتر است تمرین بیشتری داشته باشیم..."></textarea>
+    </div>
+
+    <button type="submit">ارسال نظر</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('surveyForm');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          form.innerHTML = '<div class="success">✅ نظر شما با موفقیت ثبت شد! سپاسگزارم 🙏</div>';
+        } else {
+          alert('خطا! لطفاً دوباره امتحان کنید.');
+        }
+      })
+      .catch(() => alert('مشکلی در ارسال رخ داد.'));
+    });
+  </script>
+
+</body>
+</html>
