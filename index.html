@@ -213,7 +213,7 @@
     </div>
 
             <div class="question">
-    <div class="question-text">۷. هنکام برخورد با وضعیت های جدید، احساس ناراحتی میکنم. </div>
+    <div class="question-text">۷. هنگام برخورد با وضعیت های جدید، احساس ناراحتی میکنم. </div>
     <div class="options">
         <label class="option"><input type="radio" name="سوال_7" value="1" required /> هرگز</label>
         <label class="option"><input type="radio" name="سوال_7" value="2" /> گاهی اوقات</label>
@@ -252,7 +252,7 @@
     </div>
 
             <div class="question">
-    <div class="question-text">۱۱. اگر ساعتی بیکار باشم ، احساس گناه میکنم. </div>
+    <div class="question-text">۱۱. اگر ساعتی بیکار باشم، احساس گناه میکنم. </div>
     <div class="options">
         <label class="option"><input type="radio" name="سوال_11" value="1" required /> هرگز</label>
         <label class="option"><input type="radio" name="سوال_11" value="2" /> گاهی اوقات</label>
@@ -262,7 +262,7 @@
     </div>
 
         <div class="question">
-    <div class="question-text">۱۲. همیشه در کارها عجله میکنم، حتی زمانی که اصلا تخت فشار نیستم. </div>
+    <div class="question-text">۱۲. همیشه در کارها عجله میکنم، حتی زمانی که اصلا تحت فشار نیستم. </div>
     <div class="options">
         <label class="option"><input type="radio" name="سوال_12" value="1" required /> هرگز</label>
         <label class="option"><input type="radio" name="سوال_12" value="2" /> گاهی اوقات</label>
@@ -342,7 +342,7 @@
     </div>
 
             <div class="question">
-    <div class="question-text">۲۰. قبل از اینکه راجع به موقعیت عا به طور کامل فکر کنم، آنها را یکی یکی از دست میدهم. </div>
+    <div class="question-text">۲۰. قبل از اینکه راجع به موقعیت ها به طور کامل فکر کنم، آنها را یکی یکی از دست میدهم. </div>
     <div class="options">
         <label class="option"><input type="radio" name="سوال_20" value="1" required /> هرگز</label>
         <label class="option"><input type="radio" name="سوال_20" value="2" /> گاهی اوقات</label>
@@ -402,7 +402,7 @@
     </div>
 
                 <div class="question">
-    <div class="question-text">۲۶. قبل از همه اولویت بندی کارها، شروع به انجام دادن آنها میکنم . </div>
+    <div class="question-text">۲۶. قبل از اولویت بندی کارها، شروع به انجام دادن آنها میکنم . </div>
     <div class="options">
         <label class="option"><input type="radio" name="سوال_26" value="1" required /> هرگز</label>
         <label class="option"><input type="radio" name="سوال_26" value="2" /> گاهی اوقات</label>
@@ -520,7 +520,44 @@
 </div>
 
   <script>
+    // all 32 questions in order saves in an array 
+    const QUESTIONS = [
+        "وقتی کارها خوب پیش نمی‌رود، خود را سرزنش میکنم.",
+        "آن قدر مشکلات را روی هم انباشته میکنم که گویی هر لحظه منفجر خواهم شد.",
+        "برای فراموش کردن مشکلات شخصی، بر کار خود تمرکز میکنم.",
+        "خشم و عصبانیت نسبت به افراد پیرامون خود را بروز میدهم.",
+        "زمانی که تحت فشار هستم، فقط به تغییرات منفی در رفتار خود توجه میکنم.",
+        "به جای توجه به جنبه های مثبت زندگی، به جنبه های منفی آن فکر میکنم.",
+        "هنگام برخورد با وضعیت های جدید، احساس ناراحتی میکنم.",
+        "احساس میکنم پست سازمانی من ارزش و اهمیت چندانی ندارد.",
+        "در محل کار یا جلسه های مهم دیر حاضر میشوم.",
+        "به انتقاد هایی که از من میشود واکنش منفی نشان میدهم.",
+        "اگر ساعتی بیکار باشم، احساس گناه میکنم.",
+        "همیشه در کارها عجله میکنم، حتی زمانی که اصلا تحت فشار نیستم.",
+        "زمان کافی برای مطالعه روزنامه ندارم.",
+        "انتظار دارم افراد کارها و خدمات خود را به سرعت انجام دهند.",
+        "از ابراز احساسات واقعی خود، چه در منزل و چه در محیط کار، اجتناب می‌ورزم.",
+        "کارهایی را در دست میگیرم که به هیچ وجه از پس همه آنها برنمی‌آیم.",
+        "به نصیحت ها و اندرز های افراد مافوق گوش نمیدهم.",
+        "چشم خود را بر توان شغلی و جسمی خود میبندم.",
+        "دست از تفریح و سرگرمی کشیده‌ام، زیرا کار تمام وقت مرا اشغال میکند.",
+        "قبل از اینکه راجع به موقعیت ها به طور کامل فکر کنم، آنها را یکی یکی از دست میدهم.",
+        "آنچنان درگیر کار هستم که وقت صرف ناهار با دوستان و همکاران را ندارم .",
+        "مرتبا حل مشکلات را به فرصت های دیگری موکول میکنم .",
+        "دیگران از من، هنگامی که با آنها قاطعانه برخورد نمیکنم، سوءاستفاده میکنند .",
+        "از گفتن اینکه حجم کارم بسیار زیاد است شرم دارم .",
+        "از تفویض اختیار امور به افراد دیگر پرهیز میکنم .",
+        "قبل از اولویت بندی کارها، شروع به انجام دادن آنها میکنم .",
+        "برایم مشکل است به تقاضاها و درخواست های دیگران جواب منفی بدهم .",
+        "معتقدم هر کار مهمی را باید همان روز به اتمام برسانم .",
+        "تصور میکنم توانایی تطبیق و هماهنگی با کارهای خود را ندارم .",
+        "ترس از شکست مرا از اتخاذ یک حرکت سازنده باز میدارد .",
+        "زندگی کاری من بر زندگی خانوادگی‌ام ارجحیت دارد .",
+        "اگر کاری بلافاصله انجام نشود، صبر و طاقتم را فورا از دست می‌دهم ."
 
+
+
+    ]
 
     // Form submission handler
     document.getElementById('surveyForm').addEventListener('submit', async function(e) {
@@ -576,12 +613,11 @@
     }
     });
 
-    // Function to display answers
+        // Function to display answers
     function showAnswersReview() {
     const container = document.getElementById('answersReview');
-    let html = '<h3>پاسخ‌های شما:</h3>';
+    let html = '<h3>خلاصه پاسخ‌های شما:</h3>';
     
-    // Persian digit mapping for values
     const valueLabels = {
         '1': 'هرگز',
         '2': 'گاهی اوقات',
@@ -589,17 +625,24 @@
         '4': 'همیشه'
     };
     
-    // Display all 32 questions
-    for (let i = 1; i <= 32; i++) {
-        const key = `سوال_${i}`;
-        const persianNum = i.toString().replace(/0/g, '۰').replace(/1/g, '۱').replace(/2/g, '۲')
-        .replace(/3/g, '۳').replace(/4/g, '۴').replace(/5/g, '۵').replace(/6/g, '۶')
-        .replace(/7/g, '۷').replace(/8/g, '۸').replace(/9/g, '۹');
+    // Display all 32 questions with answers
+    for (let i = 0; i < 32; i++) {
+        const questionNum = i + 1;
+        const persianNum = questionNum.toString()
+        .replace(/0/g, '۰').replace(/1/g, '۱').replace(/2/g, '۲')
+        .replace(/3/g, '۳').replace(/4/g, '۴').replace(/5/g, '۵')
+        .replace(/6/g, '۶').replace(/7/g, '۷').replace(/8/g, '۸').replace(/9/g, '۹');
         
-        const value = window.userAnswers[key] || '';
-        const label = valueLabels[value] || '—';
+        const questionText = QUESTIONS[i] || `سوال ${persianNum}`;
+        const answerValue = window.userAnswers[`سوال_${questionNum}`] || '';
+        const answerLabel = valueLabels[answerValue] || '—';
         
-        html += `<p><strong>${persianNum}.</strong> ${label}</p>`;
+        html += `
+        <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+            <div><strong>${persianNum}. ${questionText}</strong></div>
+            <div style="color: #2c3e50; margin-top: 5px;">→ ${answerLabel}</div>
+        </div>
+        `;
     }
     
     container.innerHTML = html;
