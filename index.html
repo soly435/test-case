@@ -492,58 +492,126 @@
       <button type="submit" id="submitBtn">محاسبه امتیاز و ارسال پاسخ‌ها</button>
     </form>
 
-    <div id="resultSection" class="result hidden">
-      <h2>نتیجه آزمون شما</h2>
-      <div>امتیاز کلی شما:</div>
-      <div class="score" id="totalScore"></div>
-      <div id="interpretation"></div>
-    </div>
-  </div>
+<div id="resultSection" class="result hidden">
+  <h2>نتیجه آزمون شما</h2>
+  <div>نمره کل شما:</div>
+  <div class="score" id="totalScore"></div>
+  <div id="interpretation"></div>
+  
+  <button id="showAnswersBtn" style="
+    margin-top: 20px;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  ">مشاهده پاسخ‌های من</button>
+
+  <div id="answersReview" class="hidden" style="
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    text-align: right;
+    max-height: 400px;
+    overflow-y: auto;
+  "></div>
+</div>
 
   <script>
+
+
+    // Form submission handler
+    document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const button = form.querySelector('button');
+    const originalText = button.textContent;
+    
+    // Disable & show loading
+    button.disabled = true;
+    button.textContent = 'در حال محاسبه... ⏳';
+
+    try {
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+        });
+
+        const result = await response.json();
+        
+        if (response.ok && result.total) {
+        // Show result
+        document.getElementById('totalScore').textContent = result.total;
+        document.getElementById('interpretation').textContent = interpretScore(result.total);
+        
+        // Store answers for review
+        const answers = {};
+        for (let [name, value] of formData.entries()) {
+            if (name.startsWith('سوال_')) {
+            answers[name] = value;
+            }
+        }
+        window.userAnswers = answers; // Save for later
+        
+        // Show result section
+        document.getElementById('resultSection').classList.remove('hidden');
+        form.classList.add('hidden');
+        
+        // Set up "View Answers" button
+        document.getElementById('showAnswersBtn').onclick = function() {
+            showAnswersReview();
+        };
+        } else {
+        throw new Error('Submission failed');
+        }
+    } catch (error) {
+        button.disabled = false;
+        button.textContent = originalText;
+        alert('❌ خطایی در ارسال رخ داد. لطفاً دوباره امتحان کنید.');
+    }
+    });
+
+    // Function to display answers
+    function showAnswersReview() {
+    const container = document.getElementById('answersReview');
+    let html = '<h3>پاسخ‌های شما:</h3>';
+    
+    // Persian digit mapping for values
+    const valueLabels = {
+        '1': 'هرگز',
+        '2': 'گاهی اوقات',
+        '3': 'اغلب',
+        '4': 'همیشه'
+    };
+    
+    // Display all 32 questions
+    for (let i = 1; i <= 32; i++) {
+        const key = `سوال_${i}`;
+        const persianNum = i.toString().replace(/0/g, '۰').replace(/1/g, '۱').replace(/2/g, '۲')
+        .replace(/3/g, '۳').replace(/4/g, '۴').replace(/5/g, '۵').replace(/6/g, '۶')
+        .replace(/7/g, '۷').replace(/8/g, '۸').replace(/9/g, '۹');
+        
+        const value = window.userAnswers[key] || '';
+        const label = valueLabels[value] || '—';
+        
+        html += `<p><strong>${persianNum}.</strong> ${label}</p>`;
+    }
+    
+    container.innerHTML = html;
+    container.classList.remove('hidden');
+    }
+
     // INTERPRETATION LOGIC 
     function interpretScore(total) {
       if (total <= 64) return "🟢 فشار عصبی خود را بسیار خوب کنتری می‌کنید. فشار عصبی کم می‌تواند انگیزه کار کردن را از بین ببرد. بنابراین تلاش کنید تا تعادلی مطلوب بین فشار عصبی مثبت و منفی خود برقرار کنید.";
       if (total <= 95) return "🟡 فشار عصبی شما در حد معقول است. اما در حوزه های خاصی نیاز به پیشرفت دارید.";
       if (total <= 128) return "🔴 فشار عصبی شما در حد بالایی است. نیاز به ابداع راه هایی دارید تا میزان فشار عصبی خود را پایین بیاورید.";
     }
-
-    // Form submission handler
-    document.getElementById('surveyForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const form = e.target;
-      const button = form.querySelector('button');
-      const originalText = button.textContent;
-      
-      // Disable & show loading
-      button.disabled = true;
-      button.textContent = 'در حال محاسبه... ⏳';
-
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        });
-
-        const result = await response.json();
-        
-        if (response.ok && result.total) {
-          // Show result
-          document.getElementById('totalScore').textContent = result.total;
-          document.getElementById('interpretation').textContent = interpretScore(result.total);
-          document.getElementById('resultSection').classList.remove('hidden');
-          form.classList.add('hidden');
-        } else {
-          throw new Error('Submission failed');
-        }
-      } catch (error) {
-        button.disabled = false;
-        button.textContent = originalText;
-        alert('❌ خطایی در ارسال رخ داد. لطفاً دوباره امتحان کنید.');
-      }
-    });
   </script>
 </body>
 </html>
